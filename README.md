@@ -22,6 +22,14 @@ php artisan tinker
 php artisan route:list
 - map out the route list for all the routes based on resources
 
+composer require laravel/ui --dev
+- to allow authentication scaffolding
+
+php artisan ui bootstrap
+- install bootstrap
+
+php artisan bootstrap ui:auth
+- create the authentication with boostrap as the UI
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 

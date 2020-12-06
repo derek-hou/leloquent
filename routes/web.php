@@ -22,3 +22,11 @@ Route::get('/', 'PagesController@index');
 Route::get('/services', 'PagesController@services');
 
 Route::resource('organizations', 'OrganizationsController');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
