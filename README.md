@@ -13,6 +13,9 @@ php artisan make:controller OrganizationsController --resource
 php artisan make:model Organization -m
 - create a new model with a migration
 
+php artisan make:migration <name of the new migration>
+- creates a new migration with the name provided
+
 php artisan migrate
 - apply migrations
 

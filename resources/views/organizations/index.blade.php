@@ -2,10 +2,10 @@
 
 @section('content')
     <h1>Organizations</h1>
-    @if(count($organizations) > 1)
+    @if(count($organizations) > 0)
         <ul>
             @foreach ($organizations as $org)
-                <li>{{$org->name}} {{$org->user_id}} <a href="/organizations/{{$org->id}}">details</a></li>
+                <li>{{$org->name}}
             @endforeach
         </ul>
     @else

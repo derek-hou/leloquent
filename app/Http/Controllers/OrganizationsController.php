@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Organization;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationsController extends Controller
 {
@@ -14,8 +16,8 @@ class OrganizationsController extends Controller
      */
     public function index()
     {
-        $organizations = Organization::all();
-        return view('organizations/index')->with('organizations', $organizations);
+        /* $organizations = Organization::all();
+        return view('home')->with('organizations', $organizations); */
     }
 
     /**
@@ -43,10 +45,9 @@ class OrganizationsController extends Controller
         // Create new organziation
         $organization = new Organization;
         $organization->name = $request->input('name');
-        $organization->user_id = $request->input('user_id');
         $organization->save();
 
-        return redirect('/organizations')->with('success', 'Organizations created!');
+        return redirect('/home')->with('success', 'Organization created!');
     }
 
     /**
@@ -58,7 +59,17 @@ class OrganizationsController extends Controller
     public function show($id)
     {
         $organization = Organization::find($id);
-        return view('organizations/detail')->with('organization', $organization);
+        $activeUsers = Organization::find($id)->users->where('status','ACTIVE');
+        $inactiveUsers = Organization::find($id)->users->where('status','INACTIVE')->take(1);
+        //return $inactiveUsers = DB::table('organizations')->find($id)->where('status','INACTIVE')->orderBy('created_at','desc')->get();
+
+        $data = [
+            'organization' => $organization->users,
+            'activeUsers' => $activeUsers,
+            'inactiveUsers' => $inactiveUsers,
+        ];
+
+        return view('organizations/detail')->with('data', $data);
     }
 
     /**
@@ -89,7 +100,7 @@ class OrganizationsController extends Controller
         // Create new organziation
         $organization = Organization::find($id);
         $organization->name = $request->input('name');
-        $organization->user_id = auth()->user()->id; // the user who is logged in
+        $organization->updated_at = Carbon\Carbon::now(); // assign users in the system
         $organization->save();
 
         return redirect('/organizations')->with('success', 'Organization updated!');
@@ -108,5 +119,14 @@ class OrganizationsController extends Controller
         $organization->delete();
 
         return redirect('/organizations')->with('success', 'Organization deleted!');
+    }
+
+    // populate user select dropdown
+    public function selectUsersDropdown() {
+
+        $users = User::where('role', 'USER')->pluck('email', 'id');
+
+        return view('organizations/create',compact('users'));
+
     }
 }

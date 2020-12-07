@@ -25,8 +25,8 @@ Route::resource('organizations', 'OrganizationsController');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
+Route::get('register', 'Auth\RegisterController@selectOrganizationsDropdown')->name('register');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('organizations/create', 'OrganizationsController@selectUsersDropdown');

@@ -1,13 +1,60 @@
 @extends('layouts/app')
 
 @section('content')
-    <a href="/organizations">Back</a>
-    <h1>Organizations Detail</h1>
-    <p>{{$organization->name}} {{$organization->user_id}}</p>
-    <a href="/organizations/{{$organization->id}}/edit">edit</a>
+    <a class="btn btn-primary" href="/home">Back</a>
+    <h1>Organization</h1>
+    @if (count($data['organization']) > 0)
+        <table>
+            <tr>
+                <th>Organization</th>
+                <th>Joined</th>
+            </tr>
+            @foreach ($data['organization'] as $item)
+                <tr>
+                    <td>{{$item->name}}</td>
+                    <td>{{$item->created_at}}</td>
+                </tr>
+            @endforeach
+        </table>
+    @else
+        <p>No users in this Organization.</p>
+    @endif
 
-    {!! Form::open(['action' => ['OrganizationsController@destroy', $organization->id], 'method' => 'POST']) !!}
-        {{Form::hidden('_method', 'DELETE')}}
-        {{Form::submit('Delete')}}
-    {!! Form::close() !!}
+    @if (count($data['activeUsers']) > 0)
+        <table>
+            <tr>
+                <th>Organization</th>
+                <th>Joined</th>
+                <th>Status</th>
+            </tr>
+            @foreach ($data['activeUsers'] as $item)
+                <tr>
+                    <td>{{$item->name}}</td>
+                    <td>{{$item->created_at}}</td>
+                    <td>{{$item->status}}</td>
+                </tr>
+            @endforeach
+        </table>
+    @else
+        <p>No active users in this Organization.</p>
+    @endif
+
+    @if (count($data['inactiveUsers']) > 0)
+        <table>
+            <tr>
+                <th>Organization</th>
+                <th>Joined</th>
+                <th>Status</th>
+            </tr>
+            @foreach ($data['inactiveUsers'] as $item)
+                <tr>
+                    <td>{{$item->name}}</td>
+                    <td>{{$item->created_at}}</td>
+                    <td>{{$item->status}}</td>
+                </tr>
+            @endforeach
+        </table>
+    @else
+        <p>No active users in this Organization.</p>
+    @endif
 @endsection

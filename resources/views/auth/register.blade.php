@@ -40,6 +40,26 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="organization" class="col-md-4 col-form-label text-md-right">{{ __('Organization') }}</label>
+
+                            <div class="col-md-6">
+
+                                <select class="form-control" name="organization">
+                                    <option>Select Item</option>
+                                    @foreach ($organizations as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach    </select>
+                                </select>
+
+                                @error('organization')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">

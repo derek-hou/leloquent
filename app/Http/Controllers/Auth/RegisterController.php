@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\Organization;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -64,10 +65,26 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        /* return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+        ]); */
+        
+        return $newUser = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'organization_id' => $data['organization_id'],
+            'password' => Hash::make($data['password']),
         ]);
+    }
+
+    // populate organization select dropdown
+    public function selectOrganizationsDropdown() {
+
+        $organizations = Organization::all();
+
+        return view('auth/register')->with('organizations', $organizations);
+
     }
 }
