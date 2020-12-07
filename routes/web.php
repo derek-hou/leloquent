@@ -19,8 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'PagesController@index');
 
-Route::get('/services', 'PagesController@services');
-
 Route::resource('organizations', 'OrganizationsController');
 
 Auth::routes();
@@ -30,3 +28,4 @@ Route::get('register', 'Auth\RegisterController@selectOrganizationsDropdown')->n
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('organizations/create', 'OrganizationsController@selectUsersDropdown');
+

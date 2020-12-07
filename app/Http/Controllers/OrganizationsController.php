@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class OrganizationsController extends Controller
 {
@@ -59,14 +60,17 @@ class OrganizationsController extends Controller
     public function show($id)
     {
         $organization = Organization::find($id);
+        $allUsers = Organization::find($id)->users;
         $activeUsers = Organization::find($id)->users->where('status','ACTIVE');
-        $inactiveUsers = Organization::find($id)->users->where('status','INACTIVE')->take(1);
-        //return $inactiveUsers = DB::table('organizations')->find($id)->where('status','INACTIVE')->orderBy('created_at','desc')->get();
+        $inactiveUsers = Organization::find($id)->users->where('status','INACTIVE');
+        $mostRecentInactiveUser = Organization::find($id)->users->where('status','INACTIVE')->take(1);
 
         $data = [
-            'organization' => $organization->users,
+            'organization' => $organization,
+            'allUsers' => $allUsers,
             'activeUsers' => $activeUsers,
             'inactiveUsers' => $inactiveUsers,
+            'mostRecentInactiveUser' => $mostRecentInactiveUser,
         ];
 
         return view('organizations/detail')->with('data', $data);
@@ -93,17 +97,25 @@ class OrganizationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required'
-        ]);
+        if($request->input('type') == 'DEACTIVATE') {
+            $tempPreviousMonth = Carbon::now()->subMonth();
+            $previous2Months = $tempPreviousMonth->subMonth();
+            $previousMonth = Carbon::now()->subMonth();
+            $activeUserIDs =User::select('id')->where('organization_id', 4)->where('status','ACTIVE')->whereBetween('created_at', [$previous2Months, $previousMonth])->pluck('id');
+            User::whereIn('id', $activeUserIDs)->update(array('status' => 'INACTIVE'));
+        } else {
+            $this->validate($request, [
+                'name' => 'required'
+            ]);
 
-        // Create new organziation
-        $organization = Organization::find($id);
-        $organization->name = $request->input('name');
-        $organization->updated_at = Carbon\Carbon::now(); // assign users in the system
-        $organization->save();
+            // Create new organziation
+            $organization = Organization::find($id);
+            $organization->name = $request->input('name');
+            $organization->updated_at = Carbon::now(); // assign users in the system
+            $organization->save();
 
-        return redirect('/organizations')->with('success', 'Organization updated!');
+            return redirect('/organizations')->with('success', 'Organization updated!');
+        }
     }
 
     /**
@@ -112,13 +124,21 @@ class OrganizationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        // Create new organziation
-        $organization = Organization::find($id);
-        $organization->delete();
+        //return $id;
+        // delete users
+        $type = $request->input('type');    // get the type of delete from the input
+        // make user inactive
+        if($type == 'ACTIVE') {
+            //$deleteUser = User::find($id)->delete();
+            User::where('id', $id)->update(array('status' => 'INACTIVE'));
+        } else {
+            $inactiveUserIDs = User::select('id')->where('organization_id', $id)->where('status','INACTIVE')->pluck('id');
+            User::whereIn('id', $inactiveUserIDs)->delete();
+        }
 
-        return redirect('/organizations')->with('success', 'Organization deleted!');
+        return redirect('home')->with('success', 'User deleted!');
     }
 
     // populate user select dropdown
