@@ -7,16 +7,7 @@ use Illuminate\Http\Request;
 class PagesController extends Controller
 {
     public function index() {
-        $temp = 'Testing!';
-        //return view('pages/index');
-        //return view('pages/index', compact('temp'));
-        return view('pages/index')->with('temp', $temp);
-    }
-
-    public function services() {
-        $data = array(
-            
-        );
-        return view('pages/services');
+        $textBody = 'Laravel application utilizing Eloquent.';
+        return view('pages/index')->with('textBody', $textBody);     // First argument is the variable used in the template
     }
 }

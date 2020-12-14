@@ -7,6 +7,10 @@
             {{Form::label('name', 'Name')}}
             {{Form::text('name', '', ['placeholder' => 'Name'])}}
         </div>
+        <div>
+            {{Form::label('founded_at', 'Founded')}}
+            {{Form::date('founded_at', '')}}
+        </div>
         {{Form::submit('Submit')}}
     {!! Form::close() !!}
 @endsection

@@ -5,7 +5,7 @@
     @if(count($organizations) > 0)
         <ul>
             @foreach ($organizations as $org)
-                <li>{{$org->name}}
+                <li>{{$org->name}}</li>
             @endforeach
         </ul>
     @else

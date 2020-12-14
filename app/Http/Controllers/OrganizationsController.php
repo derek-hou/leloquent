@@ -18,7 +18,7 @@ class OrganizationsController extends Controller
     public function index()
     {
         /* $organizations = Organization::all();
-        return view('home')->with('organizations', $organizations); */
+        redirect('/home')->with('organizations', $organizations); */
     }
 
     /**
@@ -46,6 +46,7 @@ class OrganizationsController extends Controller
         // Create new organziation
         $organization = new Organization;
         $organization->name = $request->input('name');
+        $organization->founded_at = Carbon::now();
         $organization->save();
 
         return redirect('/home')->with('success', 'Organization created!');
@@ -131,8 +132,8 @@ class OrganizationsController extends Controller
         $type = $request->input('type');    // get the type of delete from the input
         // make user inactive
         if($type == 'ACTIVE') {
-            //$deleteUser = User::find($id)->delete();
-            User::where('id', $id)->update(array('status' => 'INACTIVE'));
+            //$deleteUser = User::find($id)->delete();  // hard delete
+            User::where('id', $id)->update(array('status' => 'INACTIVE'));  // soft delete
         } else {
             $inactiveUserIDs = User::select('id')->where('organization_id', $id)->where('status','INACTIVE')->pluck('id');
             User::whereIn('id', $inactiveUserIDs)->delete();

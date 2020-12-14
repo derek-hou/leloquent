@@ -22,6 +22,6 @@ class Organization extends Model
     protected $primaryKey = 'id';
 
     public function users() {
-        return $this->hasMany('App\Models\User')->orderBy('created_at', 'desc');
+        return $this->hasMany('App\Models\User')->orderBy('created_at', 'desc');    // extention to allow sorting on the relation
     }
 }

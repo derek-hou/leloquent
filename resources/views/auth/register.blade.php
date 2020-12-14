@@ -44,11 +44,11 @@
 
                             <div class="col-md-6">
 
-                                <select class="form-control" name="organization">
-                                    <option>Select Item</option>
+                                <select class="form-control" name="organization_id">
+                                    <option>Select Organization</option>
                                     @foreach ($organizations as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach    </select>
+                                    @endforeach
                                 </select>
 
                                 @error('organization')

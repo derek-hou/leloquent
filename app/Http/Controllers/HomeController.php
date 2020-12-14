@@ -28,17 +28,16 @@ class HomeController extends Controller
         $user = auth()->user(); // get the authenticated user object
         if ($user->role == 'ADMIN') {
             $organizations = Organization::all(); // get all organizations
-            //$usersCount = Organization::find()->users->where('status','ACTIVE')->count();
 
             $data = [
                 'organizations' => $organizations,
                 'userRole' => $user->role
             ];
 
-            // diplay only this users' associated organization
+            // display only this users' associated organization
             return view('home')->with('data', $data);
-        } else{
-            $organizations = Organization::where('user_status', 'ACTIVE')->where('user_id', $user->id)->first(); // get 1 organization with the associated user id
+        } else {
+            return $organizations = Organization::where('id', $user->id)->first(); // get 1 organization with the associated user id
 
             $data = [
                 'organizations' => $organizations,

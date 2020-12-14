@@ -34,7 +34,8 @@
                             <h1>Organizations</h1>
                             <table>
                                 <tr>
-                                    <th>Organization</th>
+                                    <th>Name</th>
+                                    <th>Founded</th>
                                     <th></th>
                                 </tr>
                                 @foreach($data['organizations'] as $org)
@@ -42,6 +43,7 @@
                                         <td>
                                             {{$org->name}}
                                         </td>
+                                        <td>{{$org->founded_at}}</td>
                                         <td>
                                             <a class="btn btn-primary" href="/organizations/{{$org->id}}">details</a></li>
                                         </td>
